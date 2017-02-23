@@ -108,7 +108,7 @@ const opts = require('nomnom')
   .parse();
 
 Runner.run(
-  /^https?/.test(opts.transform) ? opts.transform : path.resolve(opts.transform), 
+  /^https?/.test(opts.transform) ? opts.transform : path.resolve(opts.transform),
   opts.path,
   opts
 );

@@ -12,25 +12,17 @@
 
 const fs = require('fs');
 const mkdirp = require('mkdirp');
+const os = require('os');
 const path = require('path');
 const temp = require('temp').track();
 
-function renameFileTo(oldPath, newFilename) {
-  const projectPath = path.dirname(oldPath);
-  const newPath = path.join(projectPath, newFilename);
-  mkdirp.sync(path.dirname(newPath));
-  fs.renameSync(oldPath, newPath);
-  return newPath;
-}
-
 function createTempFileWith(content, filename) {
-  const info = temp.openSync();
-  let filePath = info.path;
-  fs.writeSync(info.fd, content);
-  fs.closeSync(info.fd);
-  if (filename) {
-    filePath = renameFileTo(filePath, filename);
-  }
+  const dir = temp.mkdirSync();
+  const filePath = path.join(dir, filename || 'index.js');
+  mkdirp.sync(path.dirname(filePath));
+  const fd = fs.openSync(filePath, 'w');
+  fs.writeSync(fd, content);
+  fs.closeSync(fd);
   return filePath;
 }
 exports.createTempFileWith = createTempFileWith;
