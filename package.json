@@ -34,7 +34,6 @@
     "babel-register": "6.24.1",
     "babylon": "6.17.3",
     "colors": "1.1.2",
-    "es6-promise": "4.1.0",
     "flow-parser": "0.44.0",
     "lodash": "4.17.4",
     "micromatch": "2.3.11",
