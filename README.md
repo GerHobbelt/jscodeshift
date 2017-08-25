@@ -82,6 +82,7 @@ runner.
 Property    | Description
 ------------|------------
 jscodeshift | A reference to the jscodeshift library
+j           | A reference to the jscodeshift library
 stats       | A function to collect statistics during `--dry` runs
 
 `jscodeshift` is a reference to the wrapper around recast and provides a
