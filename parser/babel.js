@@ -10,14 +10,15 @@
 
 'use strict';
 
-module.exports = function getParser(parserName) {
-  switch (parserName) {
-    case 'babylon':
-      return require('../parser/babylon');
-    case 'flow':
-      return require('../parser/flow');
-    case 'babel':
-    default:
-      return require('../parser/babel');
-  }
+const babelParser = require('babel-core');
+
+const options = {
 };
+
+/**
+ * Wrapper to set default options
+ */
+exports.parse = function parse(code) {
+  return babelParser.transform(code);
+};
+

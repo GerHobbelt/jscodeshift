@@ -132,7 +132,15 @@ function run(data) {
         source = source.toString();
         try {
           let out = transforms.reduce((source, transform, index) => {
-            const jscodeshift = prepareJscodeshift(parsers[index] || options.parser);
+            let parser;
+            if (parsers[index]) {
+              parser = parsers[index];
+            } else if (options.parser && typeof options.parser.parse === 'function') {
+              parser = options.parser;
+            } else if (options.parser) {
+              parser = getParser(options.parser);
+            }
+            const jscodeshift = prepareJscodeshift(parser);
             return transform(
               {
                 path: file,
