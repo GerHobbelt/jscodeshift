@@ -13,7 +13,7 @@
 /*global jest, describe, it, expect*/
 
 const core = require('../core');
-const recast = require('recast');
+const recast = require('@gerhobbelt/recast');
 const b = recast.types.builders;
 const NodePath = recast.types.NodePath;
 

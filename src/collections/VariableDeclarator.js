@@ -14,7 +14,7 @@ const _ = require('lodash');
 const Collection = require('../Collection');
 const NodeCollection = require('./Node');
 const matchNode = require('../matchNode');
-const recast = require('recast');
+const recast = require('@gerhobbelt/recast');
 
 const astNodesAreEquivalent = recast.types.astNodesAreEquivalent;
 const b = recast.types.builders;

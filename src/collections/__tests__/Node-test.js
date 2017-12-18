@@ -23,7 +23,7 @@ describe('Collection API', function() {
 
     Collection = require('../../Collection');
     NodeCollection = require('../Node');
-    recast = require('recast');
+    recast = require('@gerhobbelt/recast');
 
     types = recast.types.namedTypes;
     b = recast.types.builders;

@@ -15,7 +15,7 @@ const Runner = require('../src/Runner.js');
 
 const path = require('path');
 const pkg = require('../package.json');
-const opts = require('nomnom')
+const opts = require('@gerhobbelt/nomnom')
   .script('jscodeshift')
   .options({
     path: {
@@ -101,7 +101,7 @@ const opts = require('nomnom')
           ` - babel: ${require('babel-core').version}`,
           ` - babylon: ${requirePackage('babylon').version}`,
           ` - flow: ${requirePackage('flow-parser').version}`,
-          ` - recast: ${requirePackage('recast').version}`,
+          ` - recast: ${requirePackage('@gerhobbelt/recast').version}`,
         ].join('\n');
       },
     },

@@ -14,7 +14,7 @@ const Collection = require('./Collection');
 const collections = require('./collections');
 const getParser = require('./getParser');
 const matchNode = require('./matchNode');
-const recast = require('recast');
+const recast = require('@gerhobbelt/recast');
 const template = require('./template');
 
 const Node = recast.types.namedTypes.Node;

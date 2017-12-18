@@ -10,7 +10,7 @@
 
 'use strict';
 
-const recast = require('recast');
+const recast = require('@gerhobbelt/recast');
 
 const builders = recast.types.builders;
 const types = recast.types.namedTypes;

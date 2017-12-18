@@ -23,7 +23,7 @@ describe('Collection API', function() {
     jest.resetModuleRegistry();
 
     Collection = require('../Collection');
-    recast = require('recast');
+    recast = require('@gerhobbelt/recast');
 
     NodePath = recast.types.NodePath;
     types = recast.types.namedTypes;

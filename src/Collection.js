@@ -11,7 +11,7 @@
 'use strict';
 
 const assert = require('assert');
-const recast = require('recast');
+const recast = require('@gerhobbelt/recast');
 const _ = require('lodash');
 
 const astTypes = recast.types;

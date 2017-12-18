@@ -15,7 +15,7 @@ const Collection = require('../Collection');
 const NodeCollection = require('./Node');
 
 const assert = require('assert');
-const recast = require('recast');
+const recast = require('@gerhobbelt/recast');
 const requiresModule = require('./VariableDeclarator').filters.requiresModule;
 
 const types = recast.types.namedTypes;
