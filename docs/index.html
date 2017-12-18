@@ -62,7 +62,7 @@ Usage: jscodeshift &lt;path>... [options]
 path     Files or directory to transform
 
 Options:
-   -t FILE, --transform FILE   Path to the transform file. Can be either a local path or url  [./transform.js]
+   -t NAME, --transform NAME   Path to a transform url, file, directory, or npm package. Can be given multiple times to run several transforms in order  [.]
    -c, --cpus                  (all by default) Determines the number of processes started.
    -v, --verbose               Show more information about the transform process  [0]
    -d, --dry                   Dry run (no changes are made to files)
@@ -74,10 +74,24 @@ Options:
    --run-in-band               Run serially in the current process  [false]
    -s, --silent                No output  [false]
    --parser                    The parser to use for parsing your source files (babel | babylon | flow)  [babel]
-   --version                   print version and exit</code></pre><p>This passes the source of all passed through the transform module specified
-with <code>-t</code> or <code>--transform</code> (defaults to <code>transform.js</code> in the current
-directory). The next section explains the structure of the transform module.</p>
-<h2>Transform module</h2><p>The transform is simply a module that exports a function of the form:</p>
+   --version                   print version and exit</code></pre><p>This passes the source of all passed through the transform modules specified
+with <code>-t</code> or <code>--transform</code> (they default to the current directory). The next
+section explains how transform modules are located, and the section after that
+explains the structure of transform modules.</p>
+<h2>Transform location algorithm</h2><p>The default transform is the current directory if no <code>--transform</code> flag is given.</p>
+<ol>
+<li>If URL, return file at URL</li>
+<li>If file, return file</li>
+<li>If directory<ol>
+<li>If contains directory named <code>transforms</code>, return files in that directory</li>
+<li>If contains file named <code>transform.js</code>, return file</li>
+<li>Else, return files in directory</li>
+</ol>
+</li>
+<li>If npm package, find its directory (with <code>require.resolve()</code>) and go to step 3</li>
+<li>Else, error</li>
+</ol>
+<h2>Transform module</h2><p>A transform is simply a module that exports a function of the form:</p>
 <pre class="prettyprint source lang-js"><code>module.exports = function(fileInfo, api, options) {
   // transform `fileInfo.source` here
   // ...
@@ -117,6 +131,10 @@ runner.</p>
 <td>A reference to the jscodeshift library</td>
 </tr>
 <tr>
+<td>j</td>
+<td>A reference to the jscodeshift library</td>
+</tr>
+<tr>
 <td>stats</td>
 <td>A function to collect statistics during <code>--dry</code> runs</td>
 </tr>
@@ -126,14 +144,14 @@ runner.</p>
 jQuery-like API to navigate and transform the AST. Here is a quick example,
 a more detailed description can be found below.</p>
 <pre class="prettyprint source lang-js"><code>/**
- * This replaces every occurence of variable &quot;foo&quot;.
+ * This replaces every occurrence of variable &quot;foo&quot;.
  */
 module.exports = function(fileInfo, api) {
   return api.jscodeshift(fileInfo.source)
     .findVariableDeclarators('foo')
     .renameTo('bar')
     .toSource();
-}</code></pre><p><strong>Note:</strong> This api is exposed for convenience, but you don't have to use it.
+}</code></pre><p><strong>Note:</strong> This API is exposed for convenience, but you don't have to use it.
 You can use any tool to modify the source.</p>
 <p><code>stats</code> is a function that only works when the <code>--dry</code> options is set. It accepts
 a string, and will simply count how often it was called with that value.</p>
@@ -160,7 +178,7 @@ detailed information by setting the <code>-v</code> option to <code>1</code> or 
 files (and features like templates).</p>
 <p>To do that, the transform module can export <code>parser</code>, which can either be one 
 of the strings <code>&quot;babel&quot;</code>, <code>&quot;babylon&quot;</code>, or <code>&quot;flow&quot;</code>, or it can be a parser 
-object that is compatible with with recast.</p>
+object that is compatible with recast.</p>
 <p>For example:</p>
 <pre class="prettyprint source lang-js"><code>module.exports.parser = 'flow'; // use the flow parser
 // or
@@ -276,14 +294,14 @@ jscodeshift as second argument:</p>
 <pre class="prettyprint source"><code>/MyTransform.js
 /__tests__/MyTransform-test.js
 /__testfixtures__/MyTransform.input.js
-/__testfixtures__/MyTransform.output.js</code></pre><p>To define a test, use <code>defineTest</code> from the <code>testUtils</code> module:</p>
-<pre class="prettyprint source lang-js"><code>jest.autoMockOff();
+/__testfixtures__/MyTransform.output.js</code></pre><p>To define a test, use <code>defineTest</code> or <code>defineInlineTest</code> from the <code>testUtils</code> module. A simple example is bundled in the <a href="sample">sample directory</a>.</p>
+<h4><code>defineTest</code></h4><pre class="prettyprint source lang-js"><code>jest.autoMockOff();
 const defineTest = require('jscodeshift/dist/testUtils').defineTest;
 defineTest(__dirname, 'MyTransform');</code></pre><p>An alternate fixture filename can be provided as the fourth argument to <code>defineTest</code>. This also means that multiple test fixtures can be provided:</p>
 <pre class="prettyprint source lang-js"><code>defineTest(__dirname, 'MyTransform', null, 'FirstFixture');
 defineTest(__dirname, 'MyTransform', null, 'SecondFixture');</code></pre><p>This will run two tests: One for <code>__testfixtures__/FirstFixture.input.js</code> and one for <code>__testfixtures__/SecondFixture.input.js</code></p>
-<p>A simple example is bundled in the <a href="sample">sample directory</a>.</p>
-<h3>Example Codemods</h3><ul>
+<h4><code>defineInlineTest</code></h4><pre class="prettyprint source lang-js"><code>const transform = require('../myTransform');
+defineInlineTest(transform, {}, 'input', 'expected output');</code></pre><h3>Example Codemods</h3><ul>
 <li><a href="https://github.com/reactjs/react-codemod">react-codemod</a> - React codemod scripts to update React APIs.</li>
 <li><a href="https://github.com/cpojer/js-codemod/">js-codemod</a> - Codemod scripts to transform code to next generation JS.</li>
 <li><a href="https://github.com/jhgg/js-transforms">js-transforms</a> - Some documented codemod experiments to help you learn.</li>
@@ -310,7 +328,7 @@ defineTest(__dirname, 'MyTransform', null, 'SecondFixture');</code></pre><p>This
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.1</a> on Wed Sep 21 2016 16:53:09 GMT-0400 (EDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Dec 19 2017 00:27:16 GMT+0100 (W. Europe Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
