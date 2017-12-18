@@ -10,8 +10,8 @@
 
 'use strict';
 
-const babel = require('babel-core');
-const recast = require('recast');
+const babel = require('../../getParser')('babel');
+const recast = require('@gerhobbelt/recast');
 const types = recast.types.namedTypes;
 const b = recast.types.builders;
 

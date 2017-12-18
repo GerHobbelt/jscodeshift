@@ -10,7 +10,7 @@
 
 'use strict';
 
-const babel = require('babel-core');
+const babel = require('../../getParser')('babel');
 
 describe('JSXCollection API', function() {
   let nodes;
@@ -25,7 +25,7 @@ describe('JSXCollection API', function() {
 
     Collection = require('../../Collection');
     JSXElementCollection = require('../JSXElement');
-    recast = require('recast');
+    recast = require('@gerhobbelt/recast');
     types = recast.types.namedTypes;
     b = recast.types.builders;
 
