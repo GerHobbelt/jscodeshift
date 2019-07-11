@@ -37,7 +37,7 @@
     "babylon": "6.18.0",
     "colors": "1.1.2",
     "flow-parser": "0.61.0",
-    "lodash": "4.17.4",
+    "lodash": "4.17.12",
     "micromatch": "3.1.4",
     "node-dir": "0.1.17",
     "@gerhobbelt/nomnom": "1.8.4-24",
