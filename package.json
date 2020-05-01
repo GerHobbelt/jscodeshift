@@ -13,7 +13,9 @@
     "cp2dist": "rm -rf dist && cp -R src/ dist/",
     "test": "jest --bail",
     "docs": "rm -rf docs && jsdoc -d docs -R README.md src/collections/*.js src/core.js src/Collection.js",
-    "pub": "npm publish --access public"
+    "pub": "npm publish --access public",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "bin": {
     "jscodeshift": "./bin/jscodeshift.sh"
@@ -43,7 +45,8 @@
     "@gerhobbelt/nomnom": "1.8.4-24",
     "@gerhobbelt/recast": "0.13.0-22",
     "temp": "0.8.3",
-    "write-file-atomic": "2.3.0"
+    "write-file-atomic": "2.3.0",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "babel-eslint": "8.0.3",
@@ -58,5 +61,6 @@
       "bin",
       "sample"
     ]
-  }
+  },
+  "snyk": true
 }
